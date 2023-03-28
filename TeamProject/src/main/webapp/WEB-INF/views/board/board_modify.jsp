@@ -25,7 +25,7 @@
 							<textarea rows="10" style="width:100%;" name="content">${vo.content }</textarea>
 						</td>
 					</tr>
-					<tr>
+					<tr> 
 						<!-- 글 등록 메뉴 -->
 						<td colspan="2" align="center">
 							<input type="button" value="수정" onclick="modifyCheck()">
