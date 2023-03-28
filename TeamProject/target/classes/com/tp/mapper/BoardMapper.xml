@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace 속성에는 사용할 메퍼 인터페이스 경로를 적는다 -->
+<mapper namespace="org.zerock.mapper.BoardMapper">
+<!-- id 속성은 메퍼 인터페이스에 기술된 추상 메서드 이름을 적는다 -->
+<!-- resultType 속성은 select의 결과를 특정 객체로 만들어 반환할 때 사용 -->
+<!-- VO에 기술된 멤버변수는 DB의 컬럼명과 정확히 일치해야 하고, 전체 경로를 입력해야 한다 -->
+
+<!-- BoardMapper.java의 메소드 작성 -->
+
+<select id="getList" resultType="org.zerock.domain.BoardVO">
+	select * from board order by num desc;
+</select>
+
+<insert id="insertBoard" parameterType="org.zerock.domain.BoardVO">
+	insert into board (writer, title, content) values (#{writer}, #{title}, #{content})
+</insert>
+
+<select id="getContent" parameterType="int" resultType="org.zerock.domain.BoardVO">
+	select * from board where num = #{num}
+</select>
+
+<update id="updateBoard" parameterType="org.zerock.domain.BoardVO">
+	update board set content = #{content}, title = #{title}, writer = #{writer} where num = #{num} 
+</update>
+
+<delete id="deleteBoard" parameterType="int">
+	delete from board where num = #{num}
+</delete>
+
+<update id="updateHit" parameterType="int">
+	update board set hit = hit + 1 where num = #{num}
+</update>
+</mapper>

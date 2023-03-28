@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		
+	<bean id = "DBproperties" class = "org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value = "classpath:DB_properties/Hikari.properties"/>	
+	</bean>
+	<!-- 
+	<bean id = "hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<property name="driverClassName" value = "${ds.driverClassName}"/>
+		<property name="jdbcUrl" value = "${ds.url}"/>
+		<property name="username" value = "${ds.username}"/>
+		<property name="password" value = "${ds.password}"/>
+		<property name="maximumPoolSize" value="10"></property>
+	</bean>
+	 -->
+	<!-- HikariCP 빈으로 등록하기 
+	<bean id = "hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<property name="driverClassName" value = "com.mysql.cj.jdbc.Driver"/>
+		<property name="jdbcUrl" value = "jdbc:mysql://localhost:3306/myweb?serverTimezone=Asia/Seoul"/>
+		<property name="username" value = "myweb"/>
+		<property name="password" value = "myweb"/>
+	</bean>
+-->
+	
+	<!-- DataSource 설정 -->
+	<bean id = "ds" class = "com.zaxxer.hikari.HikariDataSource">
+		<constructor-arg ref = "hikariConfig"/>
+	</bean>
+		
+	<!-- jdbcTemplate 사용을 위한 bean추가 -->
+	<!-- jdbcTemplate 이름으로 객체생성하며 의존 주입 -->
+	<bean id = "jdbcTemplate" class = "org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref = "ds"></property>	
+	</bean>
+	
+	<!-- MyBatis 사용의 핵심 객체 sessionFactory 추가 -->
+	<!-- 
+		 세션 팩토리는 내부적으로 DB와 연결을 해주고, pstmt의 SQL문 전달도 처리한다
+		 그리고 반복적인 close() 작업도 처리하여 개발자의 코드량을 줄여주며, 효율적인 작업 처리를 할 수 있게 한다
+	 -->
+	<bean id = "sqlSessionFactory" class = "org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="ds"></property>
+	</bean>
+	
+	<!-- mybatis의 맵퍼 패키지를 스캔하는 태그 -->
+	
+	<mybatis-spring:scan base-package="com.tp.mapper"/>
+	
+	
+</beans>
